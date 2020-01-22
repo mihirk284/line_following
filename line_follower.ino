@@ -6,21 +6,46 @@
 #define RIGHT_MOTOR_PIN2
 #define RIGHT_MOTOR_SPEED_PIN
 
+#define MODE_SWITCH_PIN
+
 #define SIDE_TURN_TIME 
 #define U_TURN_TIME
 
 
-#define kP
-#define kD
-#define kI
+#define KP
+#define KD
+#define KI
 #define midpointValue
 
 
+#define MODE_EXPLORE 0
+#define MODE_SHORTEST 1
+
+
 int rawLineDigital = [0,0,0,0,0,0,0,0];
+
 string lineInputPins = ["A1", "A2", "A3", "A4", "A5", "2", "3"];
 
 class planner
 {
+    short error_mem[50];
+    long dCounter;
+    float kP, kD, kI;
+    int mode;
+
+    void initPlanner()
+    {
+        dCounter = 0;
+        for(int n = 0 ; n < 50 ; n++)
+        {
+            error_mem[n]=0;
+        }
+        kP = float(KP);
+        kD = float(KD);
+        kI = float(KI);
+        mode = MODE_EXPLORE;
+
+    }
     int basic_detect_line()
     {
         int value = -1;
@@ -79,6 +104,11 @@ class planner
 
     void calculate_motor_speeds(int sensor_val)
     {
+        int lineval = basic_detect_line();
+        
+        int error = midval - lineval;
+        
+
         //use PID here
 
     }
